@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+footer {
+  margin-top: 300px;
+}
+
+footer .ppdb {
+  height: 100px;
+  background-color: #20388c;
+  padding: 30px 100px;
+}
+
+footer .ppdb .btn {
+  background-color: white;
+  width: 105px;
+  height: 38px;
+  font-size: 15px;
+  border-radius: 60px;
+}
+
+footer .ppdb .btn:hover {
+  color: #20388c;
+}
+footer .contact-footer {
+  padding: 50px 100px;
+}
+
+footer .contact-footer .alamat {
+  width: 450px;
+}
+
+footer .contact-footer .alamat img {
+  width: 60px;
+  height: 60px;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+footer .link h5 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+footer .link a {
+  text-decoration: none;
+}
+
+footer .ppdb-1 {
+  background-color: white;
+  width: 105px;
+  height: 38px;
+  font-size: 15px;
+  border-radius: 60px;
+  text-align: center;
+  padding: 10px;
+}
+footer .ppdb-1 a {
+  color: black;
+  text-decoration: none;
+}
+footer .ppdb-1:hover {
+  background-color: #20388c;
+}
