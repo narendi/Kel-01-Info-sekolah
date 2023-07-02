@@ -6,6 +6,7 @@ import NotFound from "../pages/Notfound";
 import Table from "../components/table/table";
 import Tablegallery from "../components/table/tablegallery";
 import Tablegalleryextra from "../components/table/tablegalleryextra";
+// import Tabelnew from "../components/table/tablenew";
 
 export default function Router() {
   return (

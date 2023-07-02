@@ -8,11 +8,7 @@ function classNames(...classes) {
 }
 
 export default function DashboardLayout({ children }) {
-  let [isShowing, setIsShowing] = useState(true);
-  const showSideBar = () => {
-    if (isShowing) setIsShowing(false);
-    else setIsShowing(true);
-  };
+  let [isShowing] = useState(true);
 
   return (
     <>

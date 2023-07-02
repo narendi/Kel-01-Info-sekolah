@@ -1,15 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import loginImg from ".././assets/logo.png";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
-  const handleClick = () => {
-    toast.info("Berhasil Login!", {
-      position: toast.POSITION.TOP_RIGHT,
-    });
-  };
   return (
     <div className="flex justify-end mt-32 mr-40">
       <div className="mx-auto my-auto flex">
@@ -21,10 +14,10 @@ export default function Login() {
           Admin MUPAT
         </h2>
         <div className="flex flex-col text-black py-8">
-          <label className="font-bold">Username</label>
+          <label className="font-bold">Email</label>
           <input
             className="rounded-lg transition duration-300 bg-white border-2 border-gray-300 mt-2 p-2 focus:border-red-500 focus:bg-white focus:outline-none"
-            type="text"
+            type="email"
             placeholder="Nama Pengguna/Email"
           />
         </div>
@@ -38,14 +31,11 @@ export default function Login() {
         </div>
         <Link to="/home">
           <button
-            onClick={handleClick}
             type="submit"
             className="w-full my-5 py-2 bg-red-600  hover:bg-red-700 text-white font-semibold rounded-lg"
           >
             Masuk
-            <span>
-              <ToastContainer />
-            </span>
+            <span></span>
           </button>
         </Link>
       </form>
