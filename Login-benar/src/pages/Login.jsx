@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import loginImg from ".././assets/logo.png";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 
 export default function Login() {
   return (
@@ -20,14 +21,16 @@ export default function Login() {
             type="email"
             placeholder="Nama Pengguna/Email"
           />
+          <FaEnvelope />
         </div>
         <div className="flex flex-col text-black ">
           <label className="font-bold">Password</label>
           <input
             className="p-2 rounded-lg  transition duration-300 bg-white border-2 border-gray-300 mt-2 focus:border-red-500 focus:bg-white focus:outline-none"
             type="password"
-            placeholder="Kata Sandi"
+            placeholder=" Kata Sandi"
           />
+          <FaLock />
         </div>
         <Link to="/home">
           <button

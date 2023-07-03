@@ -1,25 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlinePlus, AiTwotoneDelete } from "react-icons/ai";
 import { BsPencilSquare } from "react-icons/bs";
-// import Modal from "./modal";
+
 const Table = () => {
   const [data, setData] = useState([
     {
       id: 1,
-      image: "https://example.com/image1.jpg",
-      title: "RPL (Rekayasa Perangkat Lunak)",
-      description: "Deskripsi 1",
-      selected: false,
-    },
-    {
-      id: 2,
-      image: "https://example.com/image1.jpg",
-      title: "RPL (Rekayasa Perangkat Lunak)",
-      description: "Deskripsi 1",
-      selected: false,
-    },
-    {
-      id: 3,
       image: "https://example.com/image1.jpg",
       title: "RPL (Rekayasa Perangkat Lunak)",
       description: "Deskripsi 1",
@@ -36,7 +22,6 @@ const Table = () => {
   });
 
   useEffect(() => {
-    // Membersihkan URL objek saat komponen di-unmount
     return () => {
       data.forEach((item) => {
         if (item.image) {
@@ -46,15 +31,15 @@ const Table = () => {
     };
   }, [data]);
 
-  const handleModalOpen = () => {
+  const BukaModal = () => {
     setModalOpen(true);
   };
 
-  const handleModalClose = () => {
+  const TutupModal = () => {
     setModalOpen(false);
   };
 
-  const handleInputChange = (e) => {
+  const Masukan = (e) => {
     if (e.target.name === "image") {
       setNewItem({
         ...newItem,
@@ -68,17 +53,14 @@ const Table = () => {
     }
   };
 
-  const handleAddItem = () => {
-    // Membuat URL objek untuk gambar yang diunggah
+  const TambahItem = () => {
     const imageURL = newItem.image ? URL.createObjectURL(newItem.image) : "";
 
-    // Menambahkan item baru ke data
     setData((prevData) => [
       ...prevData,
       { ...newItem, imageURL, selected: false },
     ]);
 
-    // Menutup modal dan mengosongkan input
     setModalOpen(false);
     setNewItem({
       id: "",
@@ -89,12 +71,12 @@ const Table = () => {
     });
   };
 
-  const handleDeleteItems = () => {
+  const Hapus = () => {
     const updatedData = data.filter((item) => !item.selected);
     setData(updatedData);
   };
 
-  const handleSelectAll = () => {
+  const PilihSemua = () => {
     const updatedData = data.map((item) => {
       return {
         ...item,
@@ -105,7 +87,7 @@ const Table = () => {
     setSelectAll(!selectAll);
   };
 
-  const handleSelectItem = (itemId) => {
+  const PilihItem = (itemId) => {
     const updatedData = data.map((item) => {
       if (item.id === itemId) {
         return {
@@ -126,7 +108,7 @@ const Table = () => {
         <div>
           <button
             className="rounded-xl bg-red-500 hover:bg-red-600 text-white w-40 h-9 flex text-sm items-center py-2 px-4"
-            onClick={handleModalOpen}
+            onClick={BukaModal}
           >
             <div className="pr-3">
               <AiOutlinePlus className=" w-4 h-5 " />
@@ -137,7 +119,7 @@ const Table = () => {
         <div className="pl-4">
           <button
             className="border border-red-400 bg-white text-red-500 hover:border-white py-2 px-4 rounded-xl w-36 h-9 flex items-center text-sm "
-            onClick={handleDeleteItems}
+            onClick={Hapus}
           >
             <div className="pl-4 pr-3">
               <AiTwotoneDelete className="w-4 h-5 " />
@@ -155,7 +137,7 @@ const Table = () => {
                 <input
                   type="checkbox"
                   checked={selectAll}
-                  onChange={handleSelectAll}
+                  onChange={PilihSemua}
                   className="form-checkbox h-5 w-5 text-blue-500"
                 />
               </th>
@@ -163,13 +145,13 @@ const Table = () => {
                 No
               </th>
               <th className="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
-                Image
+                Gambar
               </th>
               <th className="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
-                Title
+                Nama
               </th>
               <th className="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
-                Description
+                Deskripsi
               </th>
               <th className="px-6 py-3 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
                 Aksi
@@ -184,7 +166,7 @@ const Table = () => {
                   <input
                     type="checkbox"
                     checked={item.selected}
-                    onChange={() => handleSelectItem(item.id)}
+                    onChange={() => PilihItem(item.id)}
                     className="form-checkbox h-5 w-5 text-blue-500"
                   />
                 </td>
@@ -196,14 +178,14 @@ const Table = () => {
                     <img
                       src={item.imageURL}
                       alt={`Image ${index + 1}`}
-                      className="h-8 w-8 rounded-full"
+                      className="h-10 w-16 rounded-md"
                     />
                   )}
                 </td>
-                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-gray-900 border-b">
+                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 font-medium text-black border-b">
                   {item.title}
                 </td>
-                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500 border-b">
+                <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-black border-b">
                   {item.description}
                 </td>
                 <td className="px-6 py-4 whitespace-no-wrap text-sm border-b">
@@ -218,73 +200,94 @@ const Table = () => {
       </div>
 
       {modalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-10 bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg p-8 max-w-md">
-            <h2 className="text-lg font-bold mb-4">Tambah Data Baru</h2>
-            <div className="mb-4">
-              <label htmlFor="id" className="block font-medium mb-2">
-                ID:
-              </label>
-              <input
-                type="text"
-                id="id"
-                name="id"
-                value={newItem.id}
-                onChange={handleInputChange}
-                className="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="image" className="block font-medium mb-2">
-                Gambar:
-              </label>
-              <input
-                type="file"
-                id="image"
-                accept="image/*"
-                name="image"
-                onChange={handleInputChange}
-                className="border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="title" className="block font-medium mb-2">
-                Title:
-              </label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={newItem.title}
-                onChange={handleInputChange}
-                className="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div className="mb-4">
-              <label htmlFor="description" className="block font-medium mb-2">
-                Description:
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={newItem.description}
-                onChange={handleInputChange}
-                className="w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-              ></textarea>
-            </div>
-            <div className="flex justify-end">
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-                onClick={handleAddItem}
-              >
-                Simpan
-              </button>
-              <button
-                className="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 ml-2 rounded"
-                onClick={handleModalClose}
-              >
-                Batal
-              </button>
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50">
+          <div className="fixed z-10 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="bg-white w-1/2 p-6 rounded-lg">
+                <div className="flex justify-end">
+                  <button
+                    className="text-gray-500 hover:text-gray-700"
+                    onClick={TutupModal}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <h1 className="text-2xl font-bold mb-4">Tambah Jurusan Baru</h1>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="title"
+                    className="block mb-2 text-sm font-medium text-gray-700"
+                  >
+                    Nama
+                  </label>
+                  <input
+                    id="title"
+                    name="title"
+                    type="text"
+                    className="w-full border border-gray-400 hover:border-gray-500 text-black rounded-md shadow-lg sm:text-xl"
+                    value={newItem.title}
+                    onChange={Masukan}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="description"
+                    className="block mb-2 text-sm font-medium text-gray-700"
+                  >
+                    Deskripsi
+                  </label>
+                  <textarea
+                    id="description"
+                    type="text"
+                    name="description"
+                    className="w-full border border-gray-400 hover:border-gray-500 rounded-md shadow-sm sm:text-lg"
+                    rows={4}
+                    value={newItem.description}
+                    onChange={Masukan}
+                  ></textarea>
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="image"
+                    className="block mb-2 text-sm font-medium text-gray-700"
+                  >
+                    Unggah Gambar
+                  </label>
+                  <input
+                    id="image"
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    className="w-full"
+                    onChange={Masukan}
+                  />
+                </div>
+
+                <div className="flex justify-end">
+                  <button
+                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                    onClick={TambahItem}
+                  >
+                    Simpan
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

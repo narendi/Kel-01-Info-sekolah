@@ -3,6 +3,7 @@
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import pp from "../../assets/hacker.jpg";
+import { HiOutlineLogout } from "react-icons/hi";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -65,12 +66,15 @@ export default function ProfileDropDown() {
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    href="#"
+                    href="/"
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      "block px-4 py-2 text-sm"
+                      "block px-4 py-2 text-sm flex hover:text-red-500"
                     )}
                   >
+                    <div className="pr-3">
+                      <HiOutlineLogout className="w-5 h-5" />
+                    </div>
                     Logout
                   </a>
                 )}
