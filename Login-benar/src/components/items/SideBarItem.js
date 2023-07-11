@@ -4,7 +4,7 @@ export default function SideBarItem({ name, title, urlPath, children }) {
     <>
       {name ? (
         <Link to={urlPath ? urlPath : "/*"}>
-          <div className="hover:bg-gray-700 dark:text-gray-100 text-black hover:text-white">
+          <div className="hover:bg-gray-700 dark:text-gray-100 text-black hover:text-white container">
             <div className="flex justify-start items-center space-x-4 px-7 py-3 ">
               {children}
               <span className="">{name}</span>

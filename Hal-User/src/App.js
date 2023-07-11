@@ -12,19 +12,21 @@ import "./styles/footer.css";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="profile" element={<Profile />} />
-        <Route path="gallery" element={<Gallery />} />
-        <Route path="rpl" element={<Rpl />} />
-        <Route path="akutansi" element={<Ak />} />
-        <Route path="bank" element={<Bank />} />
-        <Route path="elind" element={<Elind />} />
-        <Route path="tkr" element={<TKRO />} />
-        <Route path="tbsm" element={<TBSM />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="gallery" element={<Gallery />} />
+          <Route path="rpl" element={<Rpl />} />
+          <Route path="akutansi" element={<Ak />} />
+          <Route path="bank" element={<Bank />} />
+          <Route path="elind" element={<Elind />} />
+          <Route path="tkr" element={<TKRO />} />
+          <Route path="tbsm" element={<TBSM />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

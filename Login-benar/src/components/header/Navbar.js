@@ -6,7 +6,7 @@ import imglogo from "../../assets/logo.png";
 
 const Navbar = () => {
   return (
-    <nav className="bg-white text-black shadow-xl">
+    <nav className="bg-white text-black shadow-md">
       <div className="max-w-full mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">

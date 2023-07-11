@@ -1,8 +1,6 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* This example requires Tailwind CSS v2.0+ */
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import pp from "../../assets/hacker.jpg";
+import pp from "../../assets/avatar.png";
 import { HiOutlineLogout } from "react-icons/hi";
 
 function classNames(...classes) {
@@ -38,7 +36,7 @@ export default function ProfileDropDown() {
               <Menu.Item>
                 {({ active }) => (
                   <a
-                    href="#"
+                    href="profil"
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                       "block px-4 py-2 text-sm"

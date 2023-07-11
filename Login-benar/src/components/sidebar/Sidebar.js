@@ -40,16 +40,16 @@ export default function Sidebar({ isShowing, classNames }) {
             <SideBarItem name="Guru" urlPath="/*">
               <FaChalkboardTeacher className="w-5 h-5" />
             </SideBarItem>
-            <SideBarItem name="Kepala sekolah" urlPath="dashboard">
+            <SideBarItem name="Kepala sekolah" urlPath="kpl">
               <FiSettings className="w-5 h-5" />
             </SideBarItem>
             <SideBarItem name="Profile" urlPath="#">
               <AiOutlineProfile className="w-5 h-5" />
             </SideBarItem>
-            <SideBarItem name="Gallery guru" urlPath="gallery">
+            <SideBarItem name="Guru" urlPath="guru">
               <GrGallery className="w-5 h-5" />
             </SideBarItem>
-            <SideBarItem name="Gallery extra" urlPath="extra">
+            <SideBarItem name="Extrakulikuler" urlPath="extra">
               <GrGallery className="w-5 h-5" />
             </SideBarItem>
           </div>
