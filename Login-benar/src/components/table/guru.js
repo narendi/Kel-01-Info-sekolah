@@ -146,7 +146,7 @@ const Guru = () => {
                 <td className="px-6 py-4 text-center whitespace-no-wrap text-sm leading-5 font-medium text-gray-900 border-b">
                   {index + 1}
                 </td>
-                <td className="px-6 py-4 whitespace-no-wrap border-b">
+                <td className="px-6 py-4 whitespace-no-wrap border-none flex justify-center">
                   {item.imageURL && (
                     <img
                       src={item.imageURL}
@@ -266,3 +266,40 @@ const Guru = () => {
 };
 
 export default Guru;
+// const [updateIndex, setUpdateIndex] = useState(-1);
+// const [showConfirmation, setShowConfirmation] = useState(false);
+// const confirmDelete = (index) => {
+//   setUpdateIndex(index);
+//   setShowConfirmation(true);
+// };
+
+// onClick={() => confirmDelete(index)}
+
+// {showConfirmation && (
+//   <div className="fixed inset-0 bg-gray-500 bg-opacity-50">
+//     <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
+//       <div className="bg-white w-1/3 p-6 rounded-lg">
+//         <div className="mb-4">
+//           <h1 className="text-2xl font-bold">Konfirmasi Hapus Jurusan</h1>
+//           <p className="text-gray-700 mb-4">
+//             Apakah Anda yakin ingin menghapus jurusan ini?
+//           </p>
+//         </div>
+//         <div className="flex justify-end">
+//           <button
+//             className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 mr-2"
+//             onClick={cancelDelete}
+//           >
+//             Batal
+//           </button>
+//           <button
+//             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+//             onClick={proceedDelete}
+//           >
+//             Hapus
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   </div>
+// )}

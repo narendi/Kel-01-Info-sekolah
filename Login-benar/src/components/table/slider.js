@@ -2,18 +2,14 @@ import React, { useState, useEffect } from "react";
 import { AiOutlinePlus, AiTwotoneDelete } from "react-icons/ai";
 import { BsPencilSquare } from "react-icons/bs";
 
-const Kplskl = () => {
+const Slide = () => {
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [newItem, setNewItem] = useState({
     id: "",
     image: null,
-    title: "",
-    description: "",
   });
-
   const [updateIndex, setUpdateIndex] = useState(-1);
-
   useEffect(() => {
     return () => {
       data.forEach((item) => {
@@ -56,7 +52,6 @@ const Kplskl = () => {
         const updatedItem = newData[updateIndex];
 
         updatedItem.title = newItem.title;
-        updatedItem.description = newItem.description;
         updatedItem.imageURL = imageURL;
 
         return newData;
@@ -73,9 +68,6 @@ const Kplskl = () => {
     setNewItem({
       id: "",
       image: null,
-      title: "",
-      description: "",
-      selected: false,
     });
   };
 
@@ -99,17 +91,13 @@ const Kplskl = () => {
     setNewItem({
       id: selectedData.id,
       image: null,
-      title: selectedData.title,
-      description: selectedData.description,
     });
   };
 
   return (
     <div className="container mx-auto">
       <div className="justify-start pt-6 pl-9 pb-6 flex pr-7">
-        <div className="font-bold font-serif pr-5 text-xl">
-          Kata Kepala sekolah
-        </div>
+        <div className="font-bold font-serif pr-5 text-xl">Image Slide</div>
         <div>
           <button
             className="rounded-xl bg-red-500 hover:bg-red-600 text-white w-40 h-9 flex text-sm items-center py-2 px-4"
@@ -127,21 +115,14 @@ const Kplskl = () => {
         <table className="min-w-full">
           <thead>
             <tr>
-              <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
+              <th className="px-2 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
                 No
               </th>
-              <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
-                Image
+              <th className="px-4 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
+                image
               </th>
               <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
-                Title
-              </th>
-
-              <th className="px-6 py-3 text-center border bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
-                Deskripsi
-              </th>
-              <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
-                Aksi
+                aksi
               </th>
             </tr>
           </thead>
@@ -152,21 +133,14 @@ const Kplskl = () => {
                 <td className="px-6 py-4 text-center whitespace-no-wrap text-sm leading-5 font-medium text-gray-900 border-b">
                   {index + 1}
                 </td>
-                <td className="px-6 py-4 flex justify-center border-none">
+                <td className="px-6 py-4 flex justify-center whitespace-no-wrap border-b">
                   {item.imageURL && (
                     <img
                       src={item.imageURL}
                       alt={`Image ${index + 1}`}
-                      className="h-44 w-28 rounded-lg"
+                      className="h-36 w-80 rounded-lg"
                     />
                   )}
-                </td>
-
-                <td className="px-6 text-center py-4 whitespace-no-wrap text-sm leading-5 font-medium text-black border-b">
-                  {item.title}
-                </td>
-                <td className="px-6 text-center py-4 whitespace-normal max-w-md text-sm leading-5 font-medium text-black border-b">
-                  {item.description}
                 </td>
 
                 <td className="px-2 py-4 text-sm border-b">
@@ -220,45 +194,8 @@ const Kplskl = () => {
                   </button>
                 </div>
                 <h1 className="text-2xl font-bold mb-4">
-                  {updateIndex !== -1
-                    ? "Update Kepala Sekolah"
-                    : "Tambah Kepala Sekolah Baru"}
+                  {updateIndex !== -1 ? "Update Guru" : "Tambah Guru Baru"}
                 </h1>
-
-                <div className="mb-4">
-                  <label
-                    htmlFor="title"
-                    className="block mb-2 text-sm font-medium text-gray-700"
-                  >
-                    Nama
-                  </label>
-                  <input
-                    id="title"
-                    type="text"
-                    name="title"
-                    className="w-full border-2 border-gray-400 focus:border-red-500 focus:bg-white focus:outline-none rounded-md shadow-sm sm:text-lg"
-                    value={newItem.title}
-                    onChange={Masukan}
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label
-                    htmlFor="description"
-                    className="block mb-2 text-sm font-medium text-gray-700"
-                  >
-                    Deskripsi
-                  </label>
-                  <textarea
-                    id="description"
-                    type="text"
-                    name="description"
-                    className="w-full border-2 border-gray-400 rounded-md shadow-sm focus:border-red-500 focus:bg-white focus:outline-none sm:text-lg"
-                    rows={4}
-                    value={newItem.description}
-                    onChange={Masukan}
-                  />
-                </div>
 
                 <div className="mb-4">
                   <label
@@ -294,4 +231,4 @@ const Kplskl = () => {
   );
 };
 
-export default Kplskl;
+export default Slide;

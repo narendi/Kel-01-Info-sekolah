@@ -23,11 +23,11 @@ const Jurusan = () => {
 
   const fetchDataJurusan = async () => {
     try {
-      const response = await axios.get("http://localhost:3100/jurusan/all");
+      const response = await axios.get("http://localhost:5000/products/all");
       setDataJurusan(response.data);
     } catch (error) {
-      toast.error(
-        "Terjadi kesalahan saat menampilkan data jurusan:",
+      console.error(
+        "Terjadi kesalahan saat mengambil data jurusan:",
         error.message
       );
     }
@@ -78,7 +78,7 @@ const Jurusan = () => {
       formData.append("deskripsi", deskripsi);
       formData.append("gambar", gambar);
 
-      await axios.post("http://localhost:3100/jurusan", formData);
+      await axios.post("http://localhost:5000/products", formData);
       fetchDataJurusan();
 
       toast.success("Jurusan berhasil ditambahkan!");
@@ -86,7 +86,10 @@ const Jurusan = () => {
       TutupModal();
     } catch (error) {
       setLoading(false);
-      toast.error("Terjadi kesalahan saat menambahkan jurusan:", error.message);
+      console.error(
+        "Terjadi kesalahan saat menambahkan jurusan:",
+        error.message
+      );
     }
   };
 
@@ -98,7 +101,7 @@ const Jurusan = () => {
       formData.append("deskripsi", deskripsi);
       formData.append("gambar", gambar);
 
-      await axios.patch(`http://localhost:3100/jurusan/${id}`, formData);
+      await axios.patch(`http://localhost:5000/products/${id}`, formData);
       fetchDataJurusan();
 
       toast.success("Jurusan berhasil diperbarui!");
@@ -113,7 +116,7 @@ const Jurusan = () => {
   const deleteJurusan = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3100/jurusan/${id}`);
+      await axios.delete(`http://localhost:5000/products/${id}`);
       fetchDataJurusan();
 
       toast.success("Jurusan berhasil dihapus!");

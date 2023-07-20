@@ -145,7 +145,8 @@ const Extrakulikuler = () => {
                 <td className="px-6 py-4 text-center whitespace-no-wrap text-sm leading-5 font-medium text-gray-900 border-b">
                   {index + 1}
                 </td>
-                <td className="px-6 py-4 whitespace-no-wrap border-b">
+
+                <td className="px-6 py-4 whitespace-no-wrap border-none flex justify-center ">
                   {item.imageURL && (
                     <img
                       src={item.imageURL}
