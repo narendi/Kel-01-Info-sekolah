@@ -1,10 +1,10 @@
 import React from "react";
-import GuruJurusan from "../../swiper/GuruJurusan.js";
 import LabPraktikum from "../../swiper/LabPraktikum.js";
 import Footer from "../../layouts/footer.js";
 import Navigation from "../../layouts/Navbar.js";
 import Reason from "../../swiper/Reason.js";
 import SimpleJumbotron from "../../simpleJumbotron.js";
+import Guru from "../../Guru.js";
 
 const TBSM = () => {
   return (
@@ -22,7 +22,7 @@ const TBSM = () => {
         reason="Dengan kombinasi pengetahuan teknis dan bisnis yang diperoleh, lulusan jurusan TBSM dapat mengejar karir sebagai teknisi sepeda motor, insinyur desain, manajer servis, manajer bengkel, atau bahkan dapat menjadi wirausahawan dalam industri sepeda motor."
       />
       <LabPraktikum labImg="./Image/jurusan/galery/rpl/lab-software2.JPG" />
-      <GuruJurusan />
+      <Guru jurusan="TBSM" />
       <Footer />
     </div>
   );

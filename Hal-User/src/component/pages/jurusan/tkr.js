@@ -1,10 +1,10 @@
 import React from "react";
-import GuruJurusan from "../../swiper/GuruJurusan.js";
 import LabPraktikum from "../../swiper/LabPraktikum.js";
 import Footer from "../../layouts/footer.js";
 import Navigation from "../../layouts/Navbar.js";
 import Reason from "../../swiper/Reason.js";
 import SimpleJumbotron from "../../simpleJumbotron.js";
+import Guru from "../../Guru.js";
 
 const TKRO = () => {
   return (
@@ -22,7 +22,7 @@ const TKRO = () => {
         reason="siswa TKRO juga akan dilatih dalam keterampilan praktis, seperti menggunakan alat dan peralatan otomotif, membaca diagram elektrik, melakukan diagnosis masalah kendaraan, serta merancang dan memasang sistem tambahan pada kendaraan. Dengan lulus dari jurusan TKRO, siswa diharapkan memiliki pengetahuan dan keterampilan yang cukup untuk bekerja di bidang otomotif, seperti menjadi mekanik mobil, teknisi servis, atau bahkan memiliki kemampuan untuk membuka usaha sendiri di bidang perbaikan kendaraan."
       />
       <LabPraktikum labImg="./Image/jurusan/galery/rpl/lab-software2.JPG" />
-      <GuruJurusan />
+      <Guru jurusan="TKRO" />
       <Footer />
     </div>
   );

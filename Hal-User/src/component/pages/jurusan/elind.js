@@ -1,10 +1,10 @@
 import React from "react";
-import GuruJurusan from "../../swiper/GuruJurusan.js";
 import LabPraktikum from "../../swiper/LabPraktikum.js";
 import Footer from "../../layouts/footer.js";
 import Navigation from "../../layouts/Navbar.js";
 import Reason from "../../swiper/Reason.js";
 import SimpleJumbotron from "../../simpleJumbotron.js";
+import Guru from "../../Guru.js";
 
 const Elind = () => {
   return (
@@ -22,7 +22,7 @@ const Elind = () => {
         reason="Jurusan ELIND memberikan landasan pengetahuan yang luas dalam bidang elektronika dan teknik industri, sehingga lulusannya memiliki keterampilan yang dibutuhkan untuk bekerja di berbagai sektor industri, seperti manufaktur, otomasi, telekomunikasi, energi, transportasi, dan lain-lain. Mereka dapat berperan dalam perancangan, perawatan, perbaikan, pengembangan sistem, manajemen proyek, atau penelitian di bidang elektronika industri."
       />
       <LabPraktikum labImg="./Image/jurusan/galery/rpl/lab-software2.JPG" />
-      <GuruJurusan />
+      <Guru jurusan="Elind" />
       <Footer />
     </div>
   );

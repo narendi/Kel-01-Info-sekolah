@@ -3,8 +3,8 @@ import db from "../config/Database.js";
 
 const { DataTypes } = Sequelize;
 
-const Jurusan = db.define(
-  "jurusan",
+const Image = db.define(
+  "slider",
   {
     name: DataTypes.STRING,
     description: DataTypes.STRING,
@@ -16,7 +16,7 @@ const Jurusan = db.define(
   }
 );
 
-export default Jurusan;
+export default Image;
 
 (async () => {
   await db.sync();

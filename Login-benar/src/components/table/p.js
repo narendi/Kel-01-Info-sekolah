@@ -23,11 +23,11 @@ const Jurusan = () => {
 
   const fetchDataJurusan = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/products/all");
+      const response = await axios.get("http://localhost:3100/jurusan/all");
       setDataJurusan(response.data);
     } catch (error) {
-      console.error(
-        "Terjadi kesalahan saat mengambil data jurusan:",
+      toast.error(
+        "Terjadi kesalahan saat menampilkan data jurusan:",
         error.message
       );
     }
@@ -67,18 +67,27 @@ const Jurusan = () => {
     if (file) {
       setGambar(file);
       setPreviewGambar(URL.createObjectURL(file));
+    } else {
+      setGambar(null);
+      setPreviewGambar(null);
     }
   };
 
   const tambahJurusan = async () => {
     try {
       setLoading(true);
+      if (!gambar) {
+        setLoading(false);
+        toast.warning("Gambar wajib diisi");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("nama", nama);
       formData.append("deskripsi", deskripsi);
       formData.append("gambar", gambar);
 
-      await axios.post("http://localhost:5000/products", formData);
+      await axios.post("http://localhost:3100/jurusan", formData);
       fetchDataJurusan();
 
       toast.success("Jurusan berhasil ditambahkan!");
@@ -86,44 +95,49 @@ const Jurusan = () => {
       TutupModal();
     } catch (error) {
       setLoading(false);
-      console.error(
-        "Terjadi kesalahan saat menambahkan jurusan:",
-        error.message
-      );
+      toast.error("Terjadi kesalahan saat menambahkan jurusan");
     }
   };
 
   const updateJurusan = async () => {
     try {
       setLoading(true);
+      if (!gambar) {
+        setLoading(false);
+        toast.warning("Gambar wajib diisi");
+        return;
+      }
+
       const formData = new FormData();
       formData.append("nama", nama);
       formData.append("deskripsi", deskripsi);
       formData.append("gambar", gambar);
 
-      await axios.patch(`http://localhost:5000/products/${id}`, formData);
+      await axios.patch(`http://localhost:3100/jurusan/${id}`, formData);
       fetchDataJurusan();
 
       toast.success("Jurusan berhasil diperbarui!");
       setLoading(false);
-      TutupModal();
+      TutupModal(false); // Pass `false` to close the modal
     } catch (error) {
       setLoading(false);
-      toast.error("Terjadi kesalahan saat memperbarui jurusan:", error.message);
+      toast.error(
+        "Terjadi kesalahan saat memperbarui jurusan: " + error.message
+      );
     }
   };
 
   const deleteJurusan = async () => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:5000/products/${id}`);
+      await axios.delete(`http://localhost:3100/jurusan/${id}`);
       fetchDataJurusan();
 
       toast.success("Jurusan berhasil dihapus!");
       setLoading(false);
-      TutupModal();
+      TutupModal(false); // Pass `false` to close the modal
     } catch (error) {
-      toast.error("Terjadi kesalahan saat menghapus jurusan:", error.message);
+      toast.error("Terjadi kesalahan saat menghapus jurusan:" + error.message);
     }
   };
 
@@ -184,7 +198,7 @@ const Jurusan = () => {
                 <td className="px-6 text-center py-4 whitespace-no-wrap text-sm leading-5 font-medium text-black border-b">
                   {jurusan.name}
                 </td>
-                <td className="px-6 text-center py-4 whitespace-normal max-w-md text-sm leading-5 font-medium text-black border-b">
+                <td className="px-6 text-center py-4 whitespace-no-wrap max-w-md text-sm leading-5 font-medium text-black border-b">
                   {jurusan.description}
                 </td>
 
@@ -283,7 +297,10 @@ const Jurusan = () => {
                     htmlFor="image"
                     className="block mb-2 text-sm font-medium text-gray-700"
                   >
-                    Unggah Gambar
+                    <div className="flex">
+                      Unggah Gambar
+                      <div className="text-red-500 ml-2">*</div>
+                    </div>
                   </label>
                   <input
                     id="image"
@@ -375,7 +392,10 @@ const Jurusan = () => {
                     htmlFor="image"
                     className="block mb-2 text-sm font-medium text-gray-700"
                   >
-                    Unggah Gambar
+                    <div className="flex">
+                      Unggah Gambar
+                      <div className="text-red-500 ml-2">*</div>
+                    </div>
                   </label>
                   <input
                     id="image"

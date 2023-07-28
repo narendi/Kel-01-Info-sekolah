@@ -1,105 +1,137 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlinePlus, AiTwotoneDelete } from "react-icons/ai";
 import { BsPencilSquare } from "react-icons/bs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const Extrakulikuler = () => {
-  const [data, setData] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [newItem, setNewItem] = useState({
-    id: "",
-    image: null,
-    description: "",
-  });
+  const [tambahModalOpen, setTambahModalOpen] = useState(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [deleteconfirm, setDeleteConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [updateIndex, setUpdateIndex] = useState(-1);
-
+  const [id, setId] = useState("");
+  const [deskripsi, setDeskripsi] = useState("");
+  const [gambar, setGambar] = useState(null);
+  const [previewGambar, setPreviewGambar] = useState(null);
+  const [dataextra, setDataExtra] = useState([]);
   useEffect(() => {
-    return () => {
-      data.forEach((item) => {
-        if (item.imageURL) {
-          URL.revokeObjectURL(item.imageURL);
-        }
-      });
-    };
+    fetchDataExtra();
   }, []);
 
-  const BukaModal = () => {
-    setModalOpen(true);
+  const fetchDataExtra = async () => {
+    try {
+      const response = await axios.get("http://localhost:3100/extra/all");
+      setDataExtra(response.data);
+    } catch (error) {
+      toast.error(
+        "Terjadi kesalahan saat menampilkan data extrakulikuler:",
+        error.message
+      );
+    }
+  };
+
+  const BukatambahModal = () => {
+    setTambahModalOpen(true);
+  };
+
+  const BukaupdateModal = (data) => {
+    setUpdateModalOpen(true);
+    setId(data.id);
+    setDeskripsi(data.description);
+    setPreviewGambar(data.url);
+    setGambar(null);
+  };
+
+  const DeleteNotif = (data) => {
+    setDeleteConfirm(true);
+    setId(data.id);
   };
 
   const TutupModal = () => {
-    setModalOpen(false);
-    setUpdateIndex(-1);
+    setTambahModalOpen(false);
+    setDeleteConfirm(false);
+    setUpdateModalOpen(false);
+    setId("");
+    setDeskripsi("");
+    setGambar(null);
+    setPreviewGambar(null);
   };
 
-  const Masukan = (e) => {
-    if (e.target.name === "image") {
-      setNewItem({
-        ...newItem,
-        image: e.target.files[0],
-      });
+  const handleGambarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setGambar(file);
+      setPreviewGambar(URL.createObjectURL(file));
     } else {
-      setNewItem({
-        ...newItem,
-        [e.target.name]: e.target.value,
-      });
+      setGambar(null);
+      setPreviewGambar(null);
     }
   };
 
-  const TambahItem = () => {
-    const imageURL = newItem.image ? URL.createObjectURL(newItem.image) : "";
-
-    if (updateIndex !== -1) {
-      setData((prevData) => {
-        const newData = [...prevData];
-        const updatedItem = newData[updateIndex];
-
-        updatedItem.title = newItem.title;
-        updatedItem.description = newItem.description;
-        updatedItem.imageURL = imageURL;
-
-        return newData;
-      });
-
-      setUpdateIndex(-1); // Reset nilai updateIndex setelah update selesai
-    } else {
-      setData((prevData) => [
-        ...prevData,
-        { ...newItem, imageURL, selected: false },
-      ]);
-    }
-
-    setModalOpen(false);
-    setNewItem({
-      id: "",
-      image: null,
-      description: "",
-      selected: false,
-    });
-  };
-
-  const handleDelete = (index) => {
-    setData((prevData) => {
-      const newData = [...prevData];
-      const deletedItem = newData.splice(index, 1)[0];
-
-      if (deletedItem.imageURL) {
-        URL.revokeObjectURL(deletedItem.imageURL);
+  const tambahExtra = async () => {
+    try {
+      setLoading(true);
+      if (!gambar) {
+        setLoading(false);
+        toast.warning("Gambar wajib diisi");
+        return;
       }
 
-      return newData;
-    });
+      const formData = new FormData();
+      formData.append("deskripsi", deskripsi);
+      formData.append("gambar", gambar);
+
+      await axios.post("http://localhost:3100/extra", formData);
+      fetchDataExtra();
+
+      toast.success("Extrakulikuler berhasil ditambahkan!");
+      setLoading(false);
+      TutupModal();
+    } catch (error) {
+      setLoading(false);
+      toast.error("Terjadi kesalahan saat menambahkan extrakulikuler");
+    }
   };
 
-  const handleUpdate = (index) => {
-    const selectedData = data[index];
-    setModalOpen(true);
-    setUpdateIndex(index);
-    setNewItem({
-      id: selectedData.id,
-      image: null,
-      description: selectedData.description,
-    });
+  const updateExtra = async () => {
+    try {
+      setLoading(true);
+      if (!gambar) {
+        setLoading(false);
+        toast.warning("Gambar wajib diisi");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("deskripsi", deskripsi);
+      formData.append("gambar", gambar);
+
+      await axios.patch(`http://localhost:3100/extra/${id}`, formData);
+      fetchDataExtra();
+
+      toast.success("Extrakulikuler berhasil diperbarui!");
+      setLoading(false);
+      TutupModal(false); // Pass `false` to close the modal
+    } catch (error) {
+      setLoading(false);
+      toast.error("Terjadi kesalahan saat memperbarui extrakulikuler ");
+    }
+  };
+
+  const deleteExtra = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`http://localhost:3100/extra/${id}`);
+      fetchDataExtra();
+
+      toast.success("Extrakulikuler berhasil dihapus!");
+      setLoading(false);
+      TutupModal(false); // Pass `false` to close the modal
+    } catch (error) {
+      toast.error("Terjadi kesalahan saat menghapus extrakulikuler");
+    }
   };
 
   return (
@@ -109,10 +141,10 @@ const Extrakulikuler = () => {
         <div>
           <button
             className="rounded-xl bg-red-500 hover:bg-red-600 text-white w-40 h-9 flex text-sm items-center py-2 px-4"
-            onClick={BukaModal}
+            onClick={BukatambahModal}
           >
             <div className="pr-3">
-              <AiOutlinePlus className=" w-4 h-5 " />
+              <AiOutlinePlus className="w-4 h-5" />
             </div>
             Tambah Baru
           </button>
@@ -140,41 +172,40 @@ const Extrakulikuler = () => {
           </thead>
 
           <tbody className="bg-white">
-            {data.map((item, index) => (
-              <tr key={item.id}>
+            {dataextra.map((extra, index) => (
+              <tr key={index}>
                 <td className="px-6 py-4 text-center whitespace-no-wrap text-sm leading-5 font-medium text-gray-900 border-b">
                   {index + 1}
                 </td>
-
-                <td className="px-6 py-4 whitespace-no-wrap border-none flex justify-center ">
-                  {item.imageURL && (
-                    <img
-                      src={item.imageURL}
-                      alt={`Image ${index + 1}`}
-                      className="h-12 w-14 rounded-lg"
-                    />
-                  )}
+                <td className="px-6 py-4 flex justify-center whitespace-no-wrap border-none">
+                  <img
+                    src={extra.url}
+                    alt={extra.name}
+                    className="h-16 w-16 rounded-full"
+                  />
                 </td>
 
-                <td className="px-6 text-center py-4 whitespace-normal max-w-md text-sm leading-5 font-medium text-black border-b">
-                  {item.description}
+                <td className="px-6 text-center py-4 whitespace-no-wrap max-w-md text-sm leading-5 font-medium text-black border-b">
+                  {extra.description}
                 </td>
 
                 <td className="px-2 py-4 text-sm border-b">
                   <div className="flex justify-center">
                     <button
                       className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded"
-                      onClick={() => handleUpdate(index)}
+                      onClick={() => BukaupdateModal(extra)}
                     >
                       <BsPencilSquare />
                     </button>
                     <div className="pl-3">
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded"
-                        onClick={() => handleDelete(index)}
-                      >
-                        <AiTwotoneDelete className="w-4 h-5 " />
-                      </button>
+                      <div className="relative inline-block text-left">
+                        <button
+                          className="bg-red-600 hover:bg-red-500 text-white py-1 px-2 rounded"
+                          onClick={() => DeleteNotif(extra)}
+                        >
+                          <AiTwotoneDelete className="w-4 h-5 " />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -184,7 +215,19 @@ const Extrakulikuler = () => {
         </table>
       </div>
 
-      {modalOpen && (
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar={true}
+      />
+
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-gray-900" />
+        </div>
+      )}
+
+      {tambahModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50">
           <div className="fixed z-10 inset-0 overflow-y-auto">
             <div className="flex items-center justify-center min-h-screen">
@@ -211,26 +254,18 @@ const Extrakulikuler = () => {
                   </button>
                 </div>
                 <h1 className="text-2xl font-bold mb-4">
-                  {updateIndex !== -1
-                    ? "Update Extrakulikuler"
-                    : "Tambah Extrakulikuler Baru"}
+                  Tambah Extrakulikuler Baru
                 </h1>
 
                 <div className="mb-4">
-                  <label
-                    htmlFor="description"
-                    className="block mb-2 text-sm font-medium text-gray-700"
-                  >
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
                     Deskripsi
                   </label>
                   <textarea
-                    id="description"
-                    type="text"
-                    name="description"
+                    value={deskripsi}
+                    onChange={(e) => setDeskripsi(e.target.value)}
                     className="w-full border-2 border-gray-400 rounded-md shadow-sm focus:border-red-500 focus:bg-white focus:outline-none sm:text-lg"
                     rows={4}
-                    value={newItem.description}
-                    onChange={Masukan}
                   />
                 </div>
 
@@ -239,26 +274,154 @@ const Extrakulikuler = () => {
                     htmlFor="image"
                     className="block mb-2 text-sm font-medium text-gray-700"
                   >
-                    Unggah Gambar
+                    <div className="flex">
+                      Unggah Gambar
+                      <div className="text-red-500 ml-2">*</div>
+                    </div>
                   </label>
                   <input
                     id="image"
                     type="file"
-                    name="image"
                     accept="image/*"
+                    onChange={handleGambarChange}
                     className="w-full cursor-pointer"
-                    onChange={Masukan}
                   />
                 </div>
+
+                {previewGambar && (
+                  <div className="mb-4">
+                    <img
+                      src={previewGambar}
+                      alt="Preview Gambar"
+                      className="w-32 h-20 rounded-lg"
+                    />
+                  </div>
+                )}
 
                 <div className="flex justify-end">
                   <button
                     className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                    onClick={TambahItem}
+                    onClick={tambahExtra}
                   >
-                    {updateIndex !== -1 ? "Update" : "Simpan"}
+                    Simpan
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {updateModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50">
+          <div className="fixed z-10 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="bg-white w-1/2 p-6 rounded-lg">
+                <div className="flex justify-end">
+                  <button
+                    className="text-gray-500 hover:text-gray-700"
+                    onClick={TutupModal}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <h1 className="text-2xl font-bold mb-4">
+                  Update Extrakulikuler
+                </h1>
+
+                <div className="mb-4">
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    Deskripsi
+                  </label>
+                  <textarea
+                    value={deskripsi}
+                    onChange={(e) => setDeskripsi(e.target.value)}
+                    className="w-full border-2 border-gray-400 rounded-md shadow-sm focus:border-red-500 focus:bg-white focus:outline-none sm:text-lg"
+                    rows={4}
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="image"
+                    className="block mb-2 text-sm font-medium text-gray-700"
+                  >
+                    <div className="flex">
+                      Unggah Gambar
+                      <div className="text-red-500 ml-2">*</div>
+                    </div>
+                  </label>
+                  <input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleGambarChange}
+                    className="w-full cursor-pointer"
+                  />
+                </div>
+
+                {previewGambar && (
+                  <div className="mb-4">
+                    <img
+                      src={previewGambar}
+                      alt="Preview Gambar"
+                      className="w-32 h-20 rounded-lg"
+                    />
+                  </div>
+                )}
+
+                <div className="flex justify-end">
+                  <button
+                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                    onClick={updateExtra}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteconfirm && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50">
+          <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
+            <div className="bg-white w-1/3 p-6 rounded-lg">
+              <div className="mb-4">
+                <h1 className="text-2xl font-bold">
+                  Konfirmasi Hapus Extrakulikuler
+                </h1>
+                <p className="text-gray-700 mb-4">
+                  Apakah Anda yakin ingin menghapus extrakulikuler ini?
+                </p>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 mr-2"
+                  onClick={TutupModal}
+                >
+                  Batal
+                </button>
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  onClick={deleteExtra}
+                >
+                  Hapus
+                </button>
               </div>
             </div>
           </div>

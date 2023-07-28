@@ -1,11 +1,24 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Hero from "./Hero";
 import Cardjurusan from "./Card Jurusan";
-// import Statistict from "./Statistict";
 import Headmaster from "./Headmaster";
-import kegiatan1 from "./asset/TKRO.jpg";
 import { Link } from "react-router-dom";
 
 const Maincontent = () => {
+  const [newdata, setNewData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3100/extra/all?latest=true")
+      .then((response) => {
+        setNewData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div>
       <Hero />
@@ -26,24 +39,21 @@ const Maincontent = () => {
         </div>
       </div>
 
-      <div className="flex justify-center mt-8">
-        <div className="pl-28">
-          <div className="w-9/12 rounded overflow-hidden shadow-lg border-2">
-            <img className="w-full" src={kegiatan1} alt="rpl" />
-          </div>
-        </div>
-
-        <div className="pr-2">
-          <div className="w-9/12 rounded overflow-hidden shadow-lg">
-            <img className="w-full" src={kegiatan1} alt="rpl" />
-          </div>
-        </div>
-
-        <div className="pr-10">
-          <div className="w-9/12 rounded overflow-hidden shadow-lg">
-            <img className="w-full" src={kegiatan1} alt="rpl" />
-          </div>
-        </div>
+      <div className="flex justify-left mt-8 mr">
+        {newdata ? (
+          newdata.map((extra) => (
+            <div key={extra.id} className="pl-28">
+              <div className="rounded-lg overflow-hidden shadow-lg border-2 w-[290px]">
+                <img
+                  className="w-full h-32"
+                  src={`http://localhost:3100/images/extra/${extra.image}`}
+                />
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>Tidak ada data extrakulikuler terbaru.</p>
+        )}
       </div>
       <Link to="gallery">
         <p className="text-center font-bold mt-8">Lainya</p>

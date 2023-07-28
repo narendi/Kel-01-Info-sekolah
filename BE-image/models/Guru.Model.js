@@ -1,22 +1,23 @@
+// Pada file Guru.Model.js
 import { Sequelize } from "sequelize";
 import db from "../config/Database.js";
 
 const { DataTypes } = Sequelize;
 
-const Jurusan = db.define(
-  "jurusan",
+const Guru = db.define(
+  "guru_biasa",
   {
     name: DataTypes.STRING,
-    description: DataTypes.STRING,
     image: DataTypes.STRING,
     url: DataTypes.STRING,
+    jurusan: DataTypes.STRING,
   },
   {
     freezeTableName: true,
   }
 );
 
-export default Jurusan;
+export default Guru;
 
 (async () => {
   await db.sync();

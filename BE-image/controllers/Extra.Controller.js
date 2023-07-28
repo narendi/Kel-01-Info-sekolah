@@ -1,40 +1,48 @@
-import Jurusan from "../models/Jurusan.Model.js";
+import Extrakulikuler from "../models/Extra.model.js";
 import path from "path";
 import fs from "fs";
 
 export const getData = async (req, res) => {
   try {
-    const response = await Jurusan.findAll();
+    const { latest } = req.query;
+    if (latest && latest.toLowerCase() === "true") {
+      const response = await Extrakulikuler.findAll({
+        order: [["createdAt", "DESC"]],
+        limit: 3,
+      });
+      res.json(response);
+    } else {
+      const response = await Extrakulikuler.findAll();
+      res.json(response);
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+export const getDataById = async (req, res) => {
+  try {
+    const response = await Extrakulikuler.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
     res.json(response);
   } catch (error) {
     console.log(error.message);
   }
 };
 
-// export const getDataById = async (req, res) => {
-//   try {
-//     const response = await Jurusan.findOne({
-//       where: {
-//         id: req.params.id,
-//       },
-//     });
-//     res.json(response);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// };
-
 export const createData = (req, res) => {
   if (req.files === null)
     return res.status(400).json({ msg: "Tidak Ada File yang Diupload" });
-  const name = req.body.nama;
   const description = req.body.deskripsi;
   // const role = "admin";
   const file = req.files.gambar;
   const fileSize = file.data.length;
   const ext = path.extname(file.name);
   const fileName = file.md5 + ext;
-  const url = `${req.protocol}://${req.get("host")}/images/jurusan/${fileName}`;
+  const url = `${req.protocol}://${req.get("host")}/images/extra/${fileName}`;
   const allowedType = [".png", ".jpg", ".jpeg"];
 
   if (!allowedType.includes(ext.toLowerCase()))
@@ -42,11 +50,10 @@ export const createData = (req, res) => {
   if (fileSize > 5000000)
     return res.status(422).json({ msg: "Image tidak bisa lebih dari 5 MB" });
 
-  file.mv(`./public/images/jurusan/${fileName}`, async (err) => {
+  file.mv(`./public/images/extra/${fileName}`, async (err) => {
     if (err) return res.status(500).json({ msg: err.message });
     try {
-      await Jurusan.create({
-        name: name,
+      await Extrakulikuler.create({
         description: description,
         image: fileName,
         url: url,
@@ -59,16 +66,16 @@ export const createData = (req, res) => {
 };
 
 export const updateData = async (req, res) => {
-  const jurusan = await Jurusan.findOne({
+  const extrakulikuler = await Extrakulikuler.findOne({
     where: {
       id: req.params.id,
     },
   });
-  if (!jurusan) return res.status(404).json({ msg: "Data tidak ada" });
+  if (!extrakulikuler) return res.status(404).json({ msg: "Data tidak ada" });
 
   let fileName = "";
   if (req.files === null) {
-    fileName = jurusan.image;
+    fileName = extrakulikuler.image;
   } else {
     const file = req.files.gambar;
     const fileSize = file.data.length;
@@ -81,20 +88,19 @@ export const updateData = async (req, res) => {
     if (fileSize > 5000000)
       return res.status(422).json({ msg: "Image tidak bisa lebih dari 5 MB" });
 
-    // const filepath = `./public/images/jurusan/${jurusan.image}`;
+    // const filepath = `./public/images/extra/${extrakulikuler.image}`;
     // fs.unlinkSync(filepath);
 
-    file.mv(`./public/images/jurusan/${fileName}`, (err) => {
+    file.mv(`./public/images/extra/${fileName}`, (err) => {
       if (err) return res.status(500).json({ msg: err.message });
     });
   }
-  const name = req.body.nama;
   const description = req.body.deskripsi;
-  const url = `${req.protocol}://${req.get("host")}/images/jurusan/${fileName}`;
+  const url = `${req.protocol}://${req.get("host")}/images/extra/${fileName}`;
 
   try {
-    await Jurusan.update(
-      { name: name, description: description, image: fileName, url: url },
+    await Extrakulikuler.update(
+      { description: description, image: fileName, url: url },
       {
         where: {
           id: req.params.id,
@@ -108,17 +114,17 @@ export const updateData = async (req, res) => {
 };
 
 export const deleteData = async (req, res) => {
-  const jurusan = await Jurusan.findOne({
+  const extrakulikuler = await Extrakulikuler.findOne({
     where: {
       id: req.params.id,
     },
   });
-  if (!jurusan) return res.status(404).json({ msg: "Data tidak ada!" });
+  if (!extrakulikuler) return res.status(404).json({ msg: "Data tidak ada!" });
 
   try {
-    // const filepath = `./public/images/${jurusan.image}`;
+    // const filepath = `./public/images/${extrakulikuler.image}`;
     // fs.unlinkSync(filepath);
-    await Jurusan.destroy({
+    await Extrakulikuler.destroy({
       where: {
         id: req.params.id,
       },

@@ -1,10 +1,10 @@
 import React from "react";
-import GuruJurusan from "../../swiper/GuruJurusan.js";
 import LabPraktikum from "../../swiper/LabPraktikum.js";
 import Footer from "../../layouts/footer.js";
 import Navigation from "../../layouts/Navbar.js";
 import Reason from "../../swiper/Reason.js";
 import SimpleJumbotron from "../../simpleJumbotron.js";
+import Guru from "../../Guru.js";
 
 const Ak = () => {
   return (
@@ -23,9 +23,12 @@ const Ak = () => {
           reason="jurusan Akuntansi dapat menjadi pilihan yang baik   bagi seseorang yang tertarik dengan bisnis dan keuangan, dan memiliki kemampuan analitis yang baik. Namun, seperti jurusan lainnya, penting untuk memastikan bahwa jurusan ini cocok dengan minat dan kemampuan seseorang sebelum memutuskan untuk memasukinya."
         />
         <LabPraktikum labImg="./Image/jurusan/galery/akutansi/akutansi2.JPG" />
-        <GuruJurusan />
+        <div className="text-center text-xl">
+          <div className="font-bold">Guru Kita</div>
+        </div>
+        <Guru jurusan="akn" />
+        <Footer />
       </div>
-      <Footer />
     </React.Fragment>
   );
 };
