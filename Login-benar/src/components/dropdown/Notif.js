@@ -2,9 +2,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import pp from "../../assets/hacker.jpg";
 import { BellIcon } from "@heroicons/react/outline";
-import { HiOutlineLogout } from "react-icons/hi";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");

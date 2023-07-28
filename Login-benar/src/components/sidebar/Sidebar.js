@@ -1,9 +1,7 @@
 // import { BiMapPin } from "react-icons/bi";
-import { FiSettings, FiSlack, FiTrash2, FiUser, FiVideo } from "react-icons/fi";
+import { FiSettings, FiTrash2, FiUser, FiVideo } from "react-icons/fi";
 import SideBarItem from "../items/SideBarItem";
-import { FaChalkboardTeacher } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
-import { AiOutlineProfile } from "react-icons/ai";
 import { RiDashboardLine } from "react-icons/ri";
 
 export default function Sidebar({ isShowing, classNames }) {
@@ -25,7 +23,7 @@ export default function Sidebar({ isShowing, classNames }) {
             <SideBarItem name="Dashboard" urlPath="/home">
               <RiDashboardLine className="w-5 h-5" />
             </SideBarItem>
-            <SideBarItem name="Users" urlPath="users">
+            <SideBarItem name="Slider" urlPath="/slide">
               <FiUser className="w-5 h-5" />
             </SideBarItem>
           </div>
@@ -37,15 +35,11 @@ export default function Sidebar({ isShowing, classNames }) {
             <SideBarItem name="Jurusan" urlPath="jurusan">
               <FiTrash2 className="w-5 h-5" />
             </SideBarItem>
-            <SideBarItem name="Guru" urlPath="/*">
-              <FaChalkboardTeacher className="w-5 h-5" />
-            </SideBarItem>
+
             <SideBarItem name="Kepala sekolah" urlPath="kpl">
               <FiSettings className="w-5 h-5" />
             </SideBarItem>
-            <SideBarItem name="Profile" urlPath="#">
-              <AiOutlineProfile className="w-5 h-5" />
-            </SideBarItem>
+
             <SideBarItem name="Guru" urlPath="guru">
               <GrGallery className="w-5 h-5" />
             </SideBarItem>

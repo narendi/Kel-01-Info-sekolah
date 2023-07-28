@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 
 const Profil = () => {
-  const [role, setRole] = useState("");
-
-  const handleRoleChange = (event) => {
-    setRole(event.target.value);
-  };
-
   return (
     <div className="flex pl-10 pt-5">
       <div>
@@ -41,18 +35,6 @@ const Profil = () => {
         </div>
       </div>
       <div className="py-8 px-6">
-        <div className="flex flex-col py-6">
-          <label className="text-base">Role</label>
-          <select
-            className="rounded-lg w-80  bg-white border-2 border-gray-300 mt-2 p-2
-           focus:border-red-500 focus:bg-white focus:outline-none"
-            id="role"
-            value={role}
-            onChange={handleRoleChange}
-          >
-            <option value="admin">Admin</option>
-          </select>
-        </div>
         <div className="flex flex-col py-10">
           <label className="text-base">Upload Foto</label>
           <input type="file" accept="image/*" className="cursor-pointer w-72" />

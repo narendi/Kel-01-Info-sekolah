@@ -21,9 +21,9 @@ function App() {
           <Route path="rpl" element={<Rpl />} />
           <Route path="akutansi" element={<Ak />} />
           <Route path="bank" element={<Bank />} />
-          <Route path="elind" element={<Elind />} />
-          <Route path="tkr" element={<TKRO />} />
-          <Route path="tbsm" element={<TBSM />} />
+          <Route path="Elind" element={<Elind />} />
+          <Route path="TKRO" element={<TKRO />} />
+          <Route path="TBSM" element={<TBSM />} />
         </Routes>
       </BrowserRouter>
     </div>

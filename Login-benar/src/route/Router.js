@@ -4,9 +4,11 @@ import Home from "../pages/Home";
 import Login from "../pages/Login.jsx";
 import Jurusan from "../components/table/jurusan";
 import Guru from "../components/table/guru";
-import Kplskl from "../components/table/kepalasekolah";
+import KepSek from "../components/table/kepalasekolah";
 import Extrakulikuler from "../components/table/extrakulikuler";
 import Profil from "../pages/Profil";
+import Slide from "../components/table/slider";
+
 export default function Router() {
   return (
     <>
@@ -15,7 +17,8 @@ export default function Router() {
         <Route path="/*" element={<DashboardLayout />}>
           <Route path="jurusan" element={<Jurusan />} />
           <Route path="guru" element={<Guru />} />
-          <Route path="kpl" element={<Kplskl />} />
+          <Route path="slide" element={<Slide />} />
+          <Route path="kpl" element={<KepSek />} />
           <Route path="extra" element={<Extrakulikuler />} />
           <Route path="profil" element={<Profil />} />
           <Route path="home" element={<Home />} />

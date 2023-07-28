@@ -1,106 +1,141 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlinePlus, AiTwotoneDelete } from "react-icons/ai";
 import { BsPencilSquare } from "react-icons/bs";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const Guru = () => {
-  const [data, setData] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [newItem, setNewItem] = useState({
-    id: "",
-    image: null,
-    title: "",
-  });
-  const [updateIndex, setUpdateIndex] = useState(-1);
+  const [tambahModalOpen, setTambahModalOpen] = useState(false);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [deleteconfirm, setDeleteConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [id, setId] = useState("");
+  const [nama, setNama] = useState("");
+  const [jurusan, setJurusan] = useState("");
+  const [gambar, setGambar] = useState(null);
+  const [previewGambar, setPreviewGambar] = useState(null);
+  const [dataguru, setDataGuru] = useState([]);
+
   useEffect(() => {
-    return () => {
-      data.forEach((item) => {
-        if (item.imageURL) {
-          URL.revokeObjectURL(item.imageURL);
-        }
-      });
-    };
+    fetchDataGuru();
   }, []);
 
-  const BukaModal = () => {
-    setModalOpen(true);
+  const fetchDataGuru = async () => {
+    try {
+      const response = await axios.get("http://localhost:3100/guru/all");
+      setDataGuru(response.data);
+    } catch (error) {
+      toast.error(
+        "Terjadi kesalahan saat menampilkan data Guru:",
+        error.message
+      );
+    }
+  };
+
+  const BukatambahModal = () => {
+    setTambahModalOpen(true);
+  };
+
+  const BukaupdateModal = (data) => {
+    setUpdateModalOpen(true);
+    setId(data.id);
+    setNama(data.name);
+    setPreviewGambar(data.url);
+    setGambar(null);
+  };
+
+  const DeleteNotif = (data) => {
+    setDeleteConfirm(true);
+    setId(data.id);
   };
 
   const TutupModal = () => {
-    setModalOpen(false);
-    setUpdateIndex(-1);
+    setTambahModalOpen(false);
+    setDeleteConfirm(false);
+    setUpdateModalOpen(false);
+    setId("");
+    setNama("");
+    setGambar(null);
+    setPreviewGambar(null);
   };
 
-  const Masukan = (e) => {
-    if (e.target.name === "image") {
-      setNewItem({
-        ...newItem,
-        image: e.target.files[0],
-      });
+  const handleGambarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setGambar(file);
+      setPreviewGambar(URL.createObjectURL(file));
     } else {
-      setNewItem({
-        ...newItem,
-        [e.target.name]: e.target.value,
-      });
+      setGambar(null);
+      setPreviewGambar(null);
     }
   };
 
-  const TambahItem = () => {
-    const imageURL = newItem.image ? URL.createObjectURL(newItem.image) : "";
-
-    if (updateIndex !== -1) {
-      // Jika updateIndex bukan -1, berarti ada item yang akan diupdate
-      setData((prevData) => {
-        const newData = [...prevData];
-        const updatedItem = newData[updateIndex];
-
-        // Mengupdate item yang dipilih dengan newItem
-        updatedItem.title = newItem.title;
-        updatedItem.imageURL = imageURL;
-
-        return newData;
-      });
-
-      setUpdateIndex(-1); // Reset nilai updateIndex setelah update selesai
-    } else {
-      // Jika updateIndex masih -1, berarti menambahkan item baru
-      setData((prevData) => [
-        ...prevData,
-        { ...newItem, imageURL, selected: false },
-      ]);
-    }
-    setModalOpen(false);
-    setNewItem({
-      id: "",
-      image: null,
-      title: "",
-      description: "",
-      selected: false,
-    });
-  };
-
-  const handleDelete = (index) => {
-    setData((prevData) => {
-      const newData = [...prevData];
-      const deletedItem = newData.splice(index, 1)[0];
-
-      if (deletedItem.imageURL) {
-        URL.revokeObjectURL(deletedItem.imageURL);
+  const tambahGuru = async () => {
+    try {
+      setLoading(true);
+      if (!gambar || !nama || !jurusan) {
+        setLoading(false);
+        toast.warning("Nama, Gambar, dan Jurusan wajib diisi");
+        return;
       }
 
-      return newData;
-    });
+      const formData = new FormData();
+      formData.append("nama", nama);
+      formData.append("gambar", gambar);
+      formData.append("jurusan", jurusan);
+
+      await axios.post("http://localhost:3100/guru", formData);
+      fetchDataGuru();
+
+      toast.success("Guru berhasil ditambahkan!");
+      setLoading(false);
+      TutupModal();
+    } catch (error) {
+      setLoading(false);
+      toast.error("Terjadi kesalahan saat menambahkan Guru");
+    }
   };
 
-  const handleUpdate = (index) => {
-    const selectedData = data[index];
-    setModalOpen(true);
-    setUpdateIndex(index);
-    setNewItem({
-      id: selectedData.id,
-      image: null,
-      title: selectedData.title,
-      description: selectedData.description,
-    });
+  const updateGuru = async () => {
+    try {
+      setLoading(true);
+      if (!gambar || !nama || !jurusan) {
+        setLoading(false);
+        toast.warning("Nama, Gambar, dan Jurusan wajib diisi");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("nama", nama);
+      formData.append("gambar", gambar);
+      formData.append("jurusan", jurusan);
+
+      await axios.patch(`http://localhost:3100/guru/${id}`, formData);
+      fetchDataGuru();
+
+      toast.success("Guru berhasil diperbarui!");
+      setLoading(false);
+      TutupModal(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error("Terjadi kesalahan saat memperbarui Guru ");
+    }
+  };
+
+  const deleteGuru = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`http://localhost:3100/guru/${id}`);
+      fetchDataGuru();
+
+      toast.success("Guru berhasil dihapus!");
+      setLoading(false);
+      TutupModal(false);
+    } catch (error) {
+      toast.error("Terjadi kesalahan saat menghapus Guru");
+    }
   };
 
   return (
@@ -110,10 +145,10 @@ const Guru = () => {
         <div>
           <button
             className="rounded-xl bg-red-500 hover:bg-red-600 text-white w-40 h-9 flex text-sm items-center py-2 px-4"
-            onClick={BukaModal}
+            onClick={BukatambahModal}
           >
             <div className="pr-3">
-              <AiOutlinePlus className=" w-4 h-5 " />
+              <AiOutlinePlus className="w-4 h-5" />
             </div>
             Tambah Baru
           </button>
@@ -127,11 +162,17 @@ const Guru = () => {
               <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
                 No
               </th>
+
               <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
                 Gambar
               </th>
+
               <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
                 Nama
+              </th>
+
+              <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
+                jurusan
               </th>
 
               <th className="px-6 py-3 border text-center bg-gray-100 text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider border-b">
@@ -141,40 +182,44 @@ const Guru = () => {
           </thead>
 
           <tbody className="bg-white">
-            {data.map((item, index) => (
-              <tr key={item.id}>
+            {dataguru.map((guru, index) => (
+              <tr key={index}>
                 <td className="px-6 py-4 text-center whitespace-no-wrap text-sm leading-5 font-medium text-gray-900 border-b">
                   {index + 1}
                 </td>
-                <td className="px-6 py-4 whitespace-no-wrap border-b">
-                  {item.imageURL && (
-                    <img
-                      src={item.imageURL}
-                      alt={`Image ${index + 1}`}
-                      className="h-12 w-14 rounded-lg"
-                    />
-                  )}
+                <td className="px-6 py-4 flex justify-center whitespace-no-wrap border-none">
+                  <img
+                    src={guru.url}
+                    alt={guru.name}
+                    className="h-16 w-16 rounded-full"
+                  />
                 </td>
 
                 <td className="px-6 text-center py-4 whitespace-no-wrap text-sm leading-5 font-medium text-black border-b">
-                  {item.title}
+                  {guru.name}
+                </td>
+
+                <td className="px-6 text-center py-4 whitespace-no-wrap text-sm leading-5 font-medium text-black border-b">
+                  {guru.jurusan}
                 </td>
 
                 <td className="px-2 py-4 text-sm border-b">
                   <div className="flex justify-center">
                     <button
                       className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded"
-                      onClick={() => handleUpdate(index)}
+                      onClick={() => BukaupdateModal(guru)}
                     >
                       <BsPencilSquare />
                     </button>
                     <div className="pl-3">
-                      <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white py-1 px-2 rounded"
-                        onClick={() => handleDelete(index)}
-                      >
-                        <AiTwotoneDelete className="w-4 h-5 " />
-                      </button>
+                      <div className="relative inline-block text-left">
+                        <button
+                          className="bg-red-600 hover:bg-red-500 text-white py-1 px-2 rounded"
+                          onClick={() => DeleteNotif(guru)}
+                        >
+                          <AiTwotoneDelete className="w-4 h-5 " />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -184,7 +229,19 @@ const Guru = () => {
         </table>
       </div>
 
-      {modalOpen && (
+      <ToastContainer
+        position="top-right"
+        autoClose={1500}
+        hideProgressBar={true}
+      />
+
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-gray-900" />
+        </div>
+      )}
+
+      {tambahModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50">
           <div className="fixed z-10 inset-0 overflow-y-auto">
             <div className="flex items-center justify-center min-h-screen">
@@ -210,25 +267,43 @@ const Guru = () => {
                     </svg>
                   </button>
                 </div>
-                <h1 className="text-2xl font-bold mb-4">
-                  {updateIndex !== -1 ? "Update Guru" : "Tambah Guru Baru"}
-                </h1>
+                <h1 className="text-2xl font-bold mb-4">Tambah Guru Baru</h1>
 
                 <div className="mb-4">
-                  <label
-                    htmlFor="title"
-                    className="block mb-2 text-sm font-medium text-gray-700"
-                  >
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
                     Nama
                   </label>
                   <input
-                    id="title"
                     type="text"
-                    name="title"
+                    value={nama}
+                    onChange={(e) => setNama(e.target.value)}
                     className="w-full border-2 border-gray-400 focus:border-red-500 focus:bg-white focus:outline-none rounded-md shadow-sm sm:text-lg"
-                    value={newItem.title}
-                    onChange={Masukan}
                   />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="jurusan"
+                    className="block mb-2 text-sm font-medium text-gray-700"
+                  >
+                    Jurusan
+                  </label>
+                  <select
+                    id="jurusan"
+                    value={jurusan}
+                    onChange={(e) => setJurusan(e.target.value)}
+                    className="w-full border-2 border-gray-400 focus:border-red-500 focus:bg-white focus:outline-none rounded-md shadow-sm sm:text-lg"
+                  >
+                    <option value="" disabled>
+                      Pilih Jurusan
+                    </option>
+                    <option value="RPL">RPL</option>
+                    <option value="Bank">Bank</option>
+                    <option value="AKN">AKN</option>
+                    <option value="TKRO">TKRO</option>
+                    <option value="TBSM">TBSM</option>
+                    <option value="Elind">Elind</option>
+                  </select>
                 </div>
 
                 <div className="mb-4">
@@ -236,26 +311,174 @@ const Guru = () => {
                     htmlFor="image"
                     className="block mb-2 text-sm font-medium text-gray-700"
                   >
-                    Unggah Gambar
+                    <div className="flex">
+                      Unggah Gambar
+                      <div className="text-red-500 ml-2">*</div>
+                    </div>
                   </label>
                   <input
                     id="image"
                     type="file"
-                    name="image"
                     accept="image/*"
+                    onChange={handleGambarChange}
                     className="w-full cursor-pointer"
-                    onChange={Masukan}
                   />
                 </div>
+
+                {previewGambar && (
+                  <div className="mb-4">
+                    <img
+                      src={previewGambar}
+                      alt="Preview Gambar"
+                      className="w-32 h-20 rounded-lg"
+                    />
+                  </div>
+                )}
 
                 <div className="flex justify-end">
                   <button
                     className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
-                    onClick={TambahItem}
+                    onClick={tambahGuru}
                   >
-                    {updateIndex !== -1 ? "Update" : "Simpan"}
+                    Simpan
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {updateModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50">
+          <div className="fixed z-10 inset-0 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen">
+              <div className="bg-white w-1/2 p-6 rounded-lg">
+                <div className="flex justify-end">
+                  <button
+                    className="text-gray-500 hover:text-gray-700"
+                    onClick={TutupModal}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+                <h1 className="text-2xl font-bold mb-4">Update Guru</h1>
+
+                <div className="mb-4">
+                  <label className="block mb-2 text-sm font-medium text-gray-700">
+                    Nama
+                  </label>
+                  <input
+                    type="text"
+                    value={nama}
+                    onChange={(e) => setNama(e.target.value)}
+                    className="w-full border-2 border-gray-400 focus:border-red-500 focus:bg-white focus:outline-none rounded-md shadow-sm sm:text-lg"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="jurusan"
+                    className="block mb-2 text-sm font-medium text-gray-700"
+                  >
+                    Jurusan
+                  </label>
+                  <select
+                    id="jurusan"
+                    value={jurusan}
+                    onChange={(e) => setJurusan(e.target.value)}
+                    className="w-full border-2 cursor-pointer border-gray-400 focus:border-red-500 focus:bg-white focus:outline-none rounded-md shadow-sm sm:text-lg"
+                  >
+                    <option value="" disabled>
+                      Pilih Jurusan
+                    </option>
+                    <option value="RPL">RPL</option>
+                    <option value="Bank">Bank</option>
+                    <option value="AKN">AKN</option>
+                    <option value="TKRO">TKRO</option>
+                    <option value="TBSM">TBSM</option>
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <label
+                    htmlFor="image"
+                    className="block mb-2 text-sm font-medium text-gray-700"
+                  >
+                    <div className="flex">
+                      Unggah Gambar
+                      <div className="text-red-500 ml-2">*</div>
+                    </div>
+                  </label>
+                  <input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleGambarChange}
+                    className="w-full cursor-pointer"
+                  />
+                </div>
+
+                {previewGambar && (
+                  <div className="mb-4">
+                    <img
+                      src={previewGambar}
+                      alt="Preview Gambar"
+                      className="w-32 h-20 rounded-lg"
+                    />
+                  </div>
+                )}
+
+                <div className="flex justify-end">
+                  <button
+                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                    onClick={updateGuru}
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteconfirm && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50">
+          <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
+            <div className="bg-white w-1/3 p-6 rounded-lg">
+              <div className="mb-4">
+                <h1 className="text-2xl font-bold">Konfirmasi Hapus Item</h1>
+                <p className="text-gray-700 mb-4">
+                  Apakah Anda yakin ingin menghapus Item ini?
+                </p>
+              </div>
+              <div className="flex justify-end">
+                <button
+                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 mr-2"
+                  onClick={TutupModal}
+                >
+                  Batal
+                </button>
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                  onClick={deleteGuru}
+                >
+                  Hapus
+                </button>
               </div>
             </div>
           </div>
