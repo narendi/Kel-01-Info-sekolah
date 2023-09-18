@@ -1,6 +1,5 @@
 import Image from "../models/Image.Model.js";
 import path from "path";
-import fs from "fs";
 
 export const getData = async (req, res) => {
   try {
@@ -27,7 +26,6 @@ export const getData = async (req, res) => {
 export const createData = (req, res) => {
   if (req.files === null)
     return res.status(400).json({ msg: "Tidak Ada File yang Diupload" });
-  // const role = "admin";
   const name = req.body.nama;
   const description = req.body.deskripsi;
   const file = req.files.gambar;

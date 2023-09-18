@@ -32,7 +32,6 @@ function Cardjurusan() {
             <div className="px-2 py-8">
               <div className="font-bold text-xl">{jurusan.name}</div>
               <p className="text-gray-700 text-base">{jurusan.description}</p>
-              {/* Use template literals for dynamic link */}
               <Link to={`/${jurusan.name}`}>
                 <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
                   Selengkapnya

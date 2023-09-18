@@ -1,6 +1,5 @@
 import KepSek from "../models/Item.Model.js";
 import path from "path";
-import fs from "fs";
 
 export const getData = async (req, res) => {
   try {
@@ -29,7 +28,6 @@ export const createData = (req, res) => {
     return res.status(400).json({ msg: "Tidak Ada File yang Diupload" });
   const name = req.body.nama;
   const description = req.body.deskripsi;
-  // const role = "admin";
   const file = req.files.gambar;
   const fileSize = file.data.length;
   const ext = path.extname(file.name);
@@ -80,9 +78,6 @@ export const updateData = async (req, res) => {
       return res.status(422).json({ msg: "image tidak valid" });
     if (fileSize > 5000000)
       return res.status(422).json({ msg: "Image tidak bisa lebih dari 5 MB" });
-
-    const filepath = `./public/images/kepsek/${kepsek.image}`;
-    fs.unlinkSync(filepath);
 
     file.mv(`./public/images/kepsek/${fileName}`, (err) => {
       if (err) return res.status(500).json({ msg: err.message });
